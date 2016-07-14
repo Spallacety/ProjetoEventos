@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Projeto Eventos</string>
+    <string name="name">Nome</string>
+    <string name="email">E-mail</string>
+    <string name="password">Senha</string>
+    <string name="login">Login</string>
+    <string name="create_new_account">Não possui conta? Crie uma.</string>
+    <string name="already_member">Já é membro? Faça login.</string>
+    <string name="create_account">Criar conta</string>
+    <string name="authenticating">Autenticando...</string>
+    <string name="login_failed">Falha ao conectar-se</string>
+    <string name="non_user">Usuário não existente</string>
+    <string name="invalid_password">Senha inválida</string>
+    <string name="above_4_pass">Acima de 4 caracteres</string>
+    <string name="invalid_email">Insira um endereço de e-mail válido</string>
+    <string name="signup_failed">Falha ao criar conta</string>
+    <string name="above_3_char">Acima de 3 caracteres</string>
+    <string name="creating_account">Criando conta...</string>
+</resources>
