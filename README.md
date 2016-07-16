@@ -12,4 +12,5 @@ v1:
 - Os pacotes estão divididos atualmente em eventos, atividades, enums, outros e testes;
 - Os testes estão ![nesta pasta](https://github.com/Spallacety/ProjetoEventos/tree/master/app/src/main/java/br/edu/ifpi/projetoeventos/tests);
 - A parte do aplicativo em si ainda não foi feita, apenas a parte do cadastro de e-mail e senha;
-- A senha salva passa por um MD5 antes de ir pro database.
+- A senha salva passa por um MD5 antes de ir pro database;
+- Projeto feito no Android Studio.
