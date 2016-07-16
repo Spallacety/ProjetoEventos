@@ -10,6 +10,6 @@ v1:
     As classes correspondentes aos eventos e atividades em particular (Palestra, Mesa Redonda, Simpósio etc) ainda não possuem diferenças;
     Classes iniciadas por 'A' são abstratas (Ex. AEvent) e as iniciadas com 'E' são enums (Ex. EStatus);
     Os pacotes estão divididos atualmente em eventos, atividades, enums, outros e testes;
-    Os testes estão [nesta pasta](https://github.com/Spallacety/ProjetoEventos/tree/master/app/src/main/java/br/edu/ifpi/projetoeventos/tests);
+    Os testes estão ![nesta pasta](https://github.com/Spallacety/ProjetoEventos/tree/master/app/src/main/java/br/edu/ifpi/projetoeventos/tests);
     A parte do aplicativo em si ainda não foi feita, apenas a parte do cadastro de e-mail e senha;
     A senha salva passa por um MD5 antes de ir pro database.
