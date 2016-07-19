@@ -16,7 +16,7 @@ import junit.framework.Assert;
 public class EventTest {
 
 	@Test
-	public void nao_deve_aceitar_events_data_passada() {
+	public void nao_deve_aceitar_eventos_data_passada() {
 		Event event = new Event(EventType.CYCLE_OF_LECTURES);
 		Calendar testDate = Calendar.getInstance();
 		testDate.set(Calendar.YEAR, 1970);

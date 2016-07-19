@@ -2,8 +2,13 @@ package br.edu.ifpi.projetoeventos.models.others;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
+import br.edu.ifpi.projetoeventos.exceptions.ActivityIsNotFromThisEventException;
+import br.edu.ifpi.projetoeventos.exceptions.EventNotOpenException;
+import br.edu.ifpi.projetoeventos.exceptions.InscriptionAlreadyContainsActivityException;
+import br.edu.ifpi.projetoeventos.exceptions.PaidInscriptionException;
 import br.edu.ifpi.projetoeventos.models.coupon.ActivityCoupon;
 import br.edu.ifpi.projetoeventos.models.coupon.Coupon;
 import br.edu.ifpi.projetoeventos.models.coupon.GeneralCoupon;
@@ -15,25 +20,49 @@ public class Inscription {
 
 	private User user;
 	private boolean paid = false;
+	private Calendar paidDate;
 	private BigDecimal value;
 	private Event event;
 	private List<Activity> registeredActivityList = new ArrayList<>();
 	private Coupon coupon = new GeneralCoupon("0");
-	
-	public boolean addActivity(Activity activity){
-		if(!paid) {
-			if (activity.getEvent().getStatus() == EventStatus.OPEN) {
-				if (activity.getEvent() == this.event || this.event == null) {
-					if (containsActivity(registeredActivityList, activity)) {
-						return false;
-					}
-					this.event = activity.getEvent();
-					this.registeredActivityList.add(activity);
-					return true;
-				}
-				return false;
-			}
-			return false;
+
+	public Inscription(Event event){
+		this.event = event;
+	}
+
+	public void addActivity(Activity activity) throws PaidInscriptionException, EventNotOpenException,
+			InscriptionAlreadyContainsActivityException, ActivityIsNotFromThisEventException{
+		if(isPaid()) {
+			throw new PaidInscriptionException();
+		}
+
+		if (!isEventOpen(activity)) {
+			throw new EventNotOpenException();
+		}
+
+		if (!isSameEvent(activity)) {
+			throw new ActivityIsNotFromThisEventException();
+		}
+
+		if (containsActivity(registeredActivityList, activity)) {
+			throw new InscriptionAlreadyContainsActivityException();
+		}
+
+		this.event = activity.getEvent();
+		this.registeredActivityList.add(activity);
+
+	}
+
+	private boolean isSameEvent(Activity activity){
+		if(activity.getEvent() == this.event){
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isEventOpen(Activity activity){
+		if (activity.getEvent().getStatus() == EventStatus.OPEN){
+			return true;
 		}
 		return false;
 	}
@@ -51,6 +80,7 @@ public class Inscription {
 		BigDecimal tempValue = new BigDecimal(value);
 		if(tempValue.compareTo(this.value) == 0){
 			paid = true;
+			paidDate = Calendar.getInstance();
 		}
 		return isPaid();
 	}
@@ -94,5 +124,9 @@ public class Inscription {
 	public void setCoupon(Coupon coupon) {
 		this.coupon = coupon;
 	}
-	
+
+	public Event getEvent() {
+		return this.event;
+	}
+
 }
