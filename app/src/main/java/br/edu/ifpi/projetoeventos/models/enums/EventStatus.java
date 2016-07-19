@@ -1,6 +1,6 @@
 package br.edu.ifpi.projetoeventos.models.enums;
 
-public enum EStatus {
+public enum EventStatus {
 
 	IN_PROGRESS("Em andamento"),
 	OPEN("Aberto"),
@@ -8,7 +8,7 @@ public enum EStatus {
 	
 	private final String status;
 	
-	private EStatus(String status){
+	private EventStatus(String status){
 		this.status = status;
 	}
 	

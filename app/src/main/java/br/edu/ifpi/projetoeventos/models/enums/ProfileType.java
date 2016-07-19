@@ -1,6 +1,6 @@
 package br.edu.ifpi.projetoeventos.models.enums;
 
-public enum EProfileType {
+public enum ProfileType {
 
     PARTICIPANT(1, "Participante"),
     ORGANIZER(2, "Organizador"),
@@ -9,7 +9,7 @@ public enum EProfileType {
     private final int id;
     private final String name;
 
-    private EProfileType(int id, String name){
+    private ProfileType(int id, String name){
         this.id = id;
         this.name = name;
     }
@@ -22,8 +22,8 @@ public enum EProfileType {
         return this.name;
     }
 
-    public static EProfileType getById(int id) {
-        for (EProfileType e : EProfileType.values())
+    public static ProfileType getById(int id) {
+        for (ProfileType e : ProfileType.values())
         {
             if (id == e.getId()) return e;
         }

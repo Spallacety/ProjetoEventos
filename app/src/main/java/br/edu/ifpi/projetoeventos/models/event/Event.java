@@ -5,27 +5,29 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import br.edu.ifpi.projetoeventos.models.activity.AActivity;
-import br.edu.ifpi.projetoeventos.models.enums.EStatus;
+import br.edu.ifpi.projetoeventos.models.enums.EventStatus;
+import br.edu.ifpi.projetoeventos.models.enums.EventType;
 import br.edu.ifpi.projetoeventos.models.others.Institution;
 
-public abstract class AEvent {
+public class Event {
 
 	protected String name;
 	protected Institution institution;
-	protected List<AActivity> activityList = new ArrayList<>();
-	protected EStatus status;
+	protected List<Activity> activityList = new ArrayList<>();
+	protected EventStatus status;
+	private EventType eventType;
 	protected Calendar initialDate;
 
-	public AEvent(){
-		this.status = EStatus.OPEN;
+	public Event(EventType eventType){
+		this.status = EventStatus.OPEN;
 		this.initialDate = Calendar.getInstance();
 		this.initialDate.set(Calendar.YEAR, 1970);
 		this.initialDate.set(Calendar.MONTH, 0);
 		this.initialDate.set(Calendar.DAY_OF_MONTH, 1);
+		this.eventType = eventType;
 	}
 
-	public boolean addActivity(AActivity activity){
+	public boolean addActivity(Activity activity){
 		if(containsActivity(this.activityList, activity)){
 			return false;
 		}
@@ -34,8 +36,8 @@ public abstract class AEvent {
 		return true;
 	}
 
-	private boolean containsActivity(List<AActivity> activityList, AActivity activity) {
-		for (AActivity a : activityList) {
+	private boolean containsActivity(List<Activity> activityList, Activity activity) {
+		for (Activity a : activityList) {
 			if(a.hashCode() == activity.hashCode()) return true;
 		}
 		return false;
@@ -57,15 +59,15 @@ public abstract class AEvent {
 		this.institution = institution;
 	}
 
-	public List<AActivity> getActivityList() {
+	public List<Activity> getActivityList() {
 		return this.activityList;
 	}
 
-	public EStatus getStatus() {
+	public EventStatus getStatus() {
 		return this.status;
 	}
 
-	public void setStatus(EStatus status) {
+	public void setStatus(EventStatus status) {
 		this.status = status;
 	}
 
@@ -83,4 +85,7 @@ public abstract class AEvent {
 		}
 	}
 
+	public EventType getEventType(){
+		return this.eventType;
+	}
 }

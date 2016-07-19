@@ -1,20 +1,20 @@
 package br.edu.ifpi.projetoeventos.models.others;
 
-import br.edu.ifpi.projetoeventos.models.enums.EProfileType;
+import br.edu.ifpi.projetoeventos.models.enums.ProfileType;
 
 public class User {
 
     private String email;
     private String password;
     private String name;
-    private EProfileType profileType;
+    private ProfileType profileType;
 
     public User(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
-    public User(String email, String password, String name, EProfileType profileType) {
+    public User(String email, String password, String name, ProfileType profileType) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -33,7 +33,7 @@ public class User {
         return this.name;
     }
 
-    public EProfileType getProfileType() {
+    public ProfileType getProfileType() {
         return this.profileType;
     }
 

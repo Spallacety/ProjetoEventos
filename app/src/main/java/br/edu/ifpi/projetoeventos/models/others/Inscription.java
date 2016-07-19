@@ -4,19 +4,19 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.edu.ifpi.projetoeventos.models.activity.AActivity;
-import br.edu.ifpi.projetoeventos.models.event.AEvent;
+import br.edu.ifpi.projetoeventos.models.event.Activity;
+import br.edu.ifpi.projetoeventos.models.event.Event;
 
 public class Inscription {
 
 	private User user;
 	private boolean paid = false;
 	private BigDecimal value;
-	private AEvent event;
-	private List<AActivity> registeredActivityList = new ArrayList<>();
+	private Event event;
+	private List<Activity> registeredActivityList = new ArrayList<>();
 	private Coupon coupon = new Coupon("0");
 	
-	public boolean addActivity(AActivity activity){
+	public boolean addActivity(Activity activity){
 		if(!paid){
 			if(activity.getEvent() == this.event || this.event == null){
 				if(containsActivity(registeredActivityList, activity)){
@@ -31,8 +31,8 @@ public class Inscription {
 		return false;
 	}
 
-	private boolean containsActivity(List<AActivity> activityList, AActivity activity) {
-		for (AActivity a : activityList) {
+	private boolean containsActivity(List<Activity> activityList, Activity activity) {
+		for (Activity a : activityList) {
 			if(a.hashCode() == activity.hashCode()){
 				return true;
 			}
@@ -54,8 +54,8 @@ public class Inscription {
 			if (coupon.getGeneral())
 				discount = value.multiply(coupon.getDiscountPercentual());
 			if (!coupon.getGeneral()){
-				for (AActivity activity : registeredActivityList) {
-					if (activity.getClass() == coupon.getActivity().getClass()){
+				for (Activity activity : registeredActivityList) {
+					if (activity.getActivityType() == coupon.getActivity().getActivityType()){
 						discount = discount.add(activity.getValue().multiply(coupon.getDiscountPercentual()));
 					}
 				}
@@ -78,17 +78,17 @@ public class Inscription {
 	
 	public BigDecimal getValue() {
 		this.value = new BigDecimal("0");
-		for (AActivity activity : registeredActivityList) {
+		for (Activity activity : registeredActivityList) {
 			this.value = this.value.add(activity.getValue());
 		}
 		return value.subtract(this.calculateDiscount());
 	}
 	
-	public AEvent getEvent() {
+	public Event getEvent() {
 		return event;
 	}
 	
-	public List<AActivity> getRegisteredActivityList() {
+	public List<Activity> getRegisteredActivityList() {
 		return registeredActivityList;
 	}
 	

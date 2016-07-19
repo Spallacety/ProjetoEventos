@@ -4,14 +4,14 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Locale;
 
-import br.edu.ifpi.projetoeventos.models.activity.AActivity;
+import br.edu.ifpi.projetoeventos.models.event.Activity;
 
 public class Coupon {
 	
 	private String name;
 	private Calendar expirationDate;
 	private BigDecimal discountPercentual;
-	private AActivity activity;
+	private Activity activity;
 	private boolean general = true;
 	
 	public Coupon(String value){
@@ -41,11 +41,11 @@ public class Coupon {
 		this.expirationDate = data;
 	}
 	
-	public AActivity getActivity() {
+	public Activity getActivity() {
 		return activity;
 	}
 	
-	public void setActivity(AActivity activity) {
+	public void setActivity(Activity activity) {
 		this.activity = activity;
 		this.general = false;
 	}	

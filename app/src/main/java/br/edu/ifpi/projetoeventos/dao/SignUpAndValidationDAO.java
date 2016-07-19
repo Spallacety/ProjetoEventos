@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import br.edu.ifpi.projetoeventos.models.enums.EProfileType;
+import br.edu.ifpi.projetoeventos.models.enums.ProfileType;
 import br.edu.ifpi.projetoeventos.models.others.User;
 
 public class SignUpAndValidationDAO extends SQLiteOpenHelper {
@@ -71,8 +71,8 @@ public class SignUpAndValidationDAO extends SQLiteOpenHelper {
             String newUsername = c.getString(c.getColumnIndex("username"));
             String newPassword = c.getString(c.getColumnIndex("password"));
             String newName = c.getString(c.getColumnIndex("name"));
-            EProfileType newEProfileType = EProfileType.getById(c.getInt(c.getColumnIndex("idEProfileType")));
-            User user = new User(newUsername, newPassword, newName, newEProfileType);
+            ProfileType newProfileType = ProfileType.getById(c.getInt(c.getColumnIndex("idEProfileType")));
+            User user = new User(newUsername, newPassword, newName, newProfileType);
             return user;
         }
         catch (CursorIndexOutOfBoundsException e){

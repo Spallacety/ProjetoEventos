@@ -15,7 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import br.edu.ifpi.projetoeventos.dao.SignUpAndValidationDAO;
-import br.edu.ifpi.projetoeventos.models.enums.EProfileType;
+import br.edu.ifpi.projetoeventos.models.enums.ProfileType;
 import br.edu.ifpi.projetoeventos.models.others.User;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -98,7 +98,7 @@ public class SignupActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
 
         SignUpAndValidationDAO dao = new SignUpAndValidationDAO(this);
-        dao.insert(new User(email, password, name, EProfileType.PARTICIPANT));
+        dao.insert(new User(email, password, name, ProfileType.PARTICIPANT));
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
