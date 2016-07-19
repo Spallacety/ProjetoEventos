@@ -1,5 +1,6 @@
 package br.edu.ifpi.projetoeventos.models.others;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -9,11 +10,12 @@ public class Coupon {
 	
 	private String name;
 	private Calendar expirationDate;
-	private double discountPercentual;
+	private BigDecimal discountPercentual;
 	private AActivity activity;
 	private boolean general = true;
 	
-	public Coupon(){
+	public Coupon(String value){
+		this.discountPercentual = new BigDecimal(value);
 		this.expirationDate = Calendar.getInstance(Locale.getDefault());
 		this.expirationDate.set(Calendar.YEAR, 1970);
 		this.expirationDate.set(Calendar.MONTH, 0);
@@ -48,13 +50,10 @@ public class Coupon {
 		this.general = false;
 	}	
 
-	public double getDiscountPercentual() {
+	public BigDecimal getDiscountPercentual() {
 		return discountPercentual;
 	}
-	
-	public void setDiscountPercentual(double discountPercentual) {
-		this.discountPercentual = discountPercentual;
-	}
+
 	
 	public boolean getGeneral(){
 		return this.general;

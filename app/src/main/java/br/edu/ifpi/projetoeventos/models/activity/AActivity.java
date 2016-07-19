@@ -1,19 +1,21 @@
 package br.edu.ifpi.projetoeventos.models.activity;
 
+import java.math.BigDecimal;
+
 import br.edu.ifpi.projetoeventos.models.event.AEvent;
 
 public abstract class AActivity {
 
-	protected double value;
+	protected BigDecimal value;
 	protected String name;
 	protected AEvent event;
 	
-	public AActivity(String name, double value){
+	public AActivity(String name, String value){
 		this.name = name;
-		this.value = value;
+		this.value = new BigDecimal(value);
 	}
 
-	public double getValue() {
+	public BigDecimal getValue() {
 		return value;
 	}
 
@@ -28,5 +30,5 @@ public abstract class AActivity {
 	public void setEvent(AEvent event) {
 		this.event = event;
 	}
-	
+
 }

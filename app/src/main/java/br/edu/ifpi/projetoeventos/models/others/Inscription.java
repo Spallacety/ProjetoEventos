@@ -1,5 +1,6 @@
 package br.edu.ifpi.projetoeventos.models.others;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,10 +11,10 @@ public class Inscription {
 
 	private User user;
 	private boolean paid = false;
-	private double value;
+	private BigDecimal value;
 	private AEvent event;
 	private List<AActivity> registeredActivityList = new ArrayList<>();
-	private Coupon coupon = new Coupon();
+	private Coupon coupon = new Coupon("0");
 	
 	public boolean addActivity(AActivity activity){
 		if(!paid){
@@ -39,22 +40,23 @@ public class Inscription {
 		return false;
 	}
 	
-	public boolean pay(double value){
-		if(value >= this.value){
+	public boolean pay(String value){
+		BigDecimal tempValue = new BigDecimal(value);
+		if(tempValue.compareTo(this.value) == 0){
 			paid = true;
 		}
 		return isPaid();
 	}
 	
-	private double calculateDiscount(){
-		double discount = 0;
+	private BigDecimal calculateDiscount(){
+		BigDecimal discount = new BigDecimal("0");
 		if(coupon.isActive()){
 			if (coupon.getGeneral())
-				discount = value * coupon.getDiscountPercentual();
+				discount = value.multiply(coupon.getDiscountPercentual());
 			if (!coupon.getGeneral()){
 				for (AActivity activity : registeredActivityList) {
 					if (activity.getClass() == coupon.getActivity().getClass()){
-						discount += activity.getValue()* coupon.getDiscountPercentual();
+						discount = discount.add(activity.getValue().multiply(coupon.getDiscountPercentual()));
 					}
 				}
 			}
@@ -74,12 +76,12 @@ public class Inscription {
 		this.paid = paid;
 	}
 	
-	public double getValue() {
-		this.value = 0;
+	public BigDecimal getValue() {
+		this.value = new BigDecimal("0");
 		for (AActivity activity : registeredActivityList) {
-			this.value += activity.getValue();
+			this.value = this.value.add(activity.getValue());
 		}
-		return value - this.calculateDiscount();
+		return value.subtract(this.calculateDiscount());
 	}
 	
 	public AEvent getEvent() {
