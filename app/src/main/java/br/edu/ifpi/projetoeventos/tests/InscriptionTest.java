@@ -7,22 +7,25 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import br.edu.ifpi.projetoeventos.models.coupon.GeneralCoupon;
 import br.edu.ifpi.projetoeventos.models.enums.EventType;
 import br.edu.ifpi.projetoeventos.models.event.Activity;
 import br.edu.ifpi.projetoeventos.models.enums.ActivityType;
 import br.edu.ifpi.projetoeventos.models.event.Event;
-import br.edu.ifpi.projetoeventos.models.others.Coupon;
+import br.edu.ifpi.projetoeventos.models.coupon.Coupon;
 import br.edu.ifpi.projetoeventos.models.others.Inscription;
 
 public class InscriptionTest {
 
 	@Test
 	public void nao_deve_aplicar_desconto_de_cupons_nao_ativos() {
-		Coupon coupon = new Coupon("1.0");
+		GeneralCoupon coupon = new GeneralCoupon("1.0");
 		coupon.setExpirationDate(1, 1, 2015);
 		Inscription inscription = new Inscription();
 		inscription.setCoupon(coupon);
 		Activity lecture = new Activity("Lecture", "300", ActivityType.LECTURE);
+		Event symposium = new Event(EventType.SYMPOSIUM);
+		symposium.addActivity(lecture);
 		inscription.addActivity(lecture);
 		Assert.assertEquals(new BigDecimal("300"), inscription.getValue());
 	}
@@ -100,9 +103,11 @@ public class InscriptionTest {
 	}
 
 	@Test
-	public void inscricao_deve_aplicar_descontos_ativos_do_evento() {
+	public void inscricao_deve_aplicar_descontos_ativos() {
 		Activity lecture = new Activity("Lecture", "300", ActivityType.LECTURE);
-		Coupon coupon = new Coupon("0.5");
+		Event symposium = new Event(EventType.SYMPOSIUM);
+		symposium.addActivity(lecture);
+		GeneralCoupon coupon = new GeneralCoupon("0.5");
 		coupon.setExpirationDate(1, 10, 2500);
 		Inscription inscription = new Inscription();
 		inscription.setCoupon(coupon);

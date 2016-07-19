@@ -51,24 +51,12 @@ public class Event {
 		this.name = name;
 	}
 
-	public Institution getInstitution() {
-		return this.institution;
-	}
-
-	public void setInstitution(Institution institution) {
-		this.institution = institution;
-	}
-
 	public List<Activity> getActivityList() {
 		return this.activityList;
 	}
 
 	public EventStatus getStatus() {
 		return this.status;
-	}
-
-	public void setStatus(EventStatus status) {
-		this.status = status;
 	}
 
 	public Calendar getInitialDate() {
@@ -85,7 +73,4 @@ public class Event {
 		}
 	}
 
-	public EventType getEventType(){
-		return this.eventType;
-	}
 }
