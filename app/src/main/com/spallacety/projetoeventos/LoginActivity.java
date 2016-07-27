@@ -6,6 +6,8 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
+import android.content.Intent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -15,46 +17,46 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import br.edu.ifpi.projetoeventos.dao.SignUpAndValidationDAO;
-import br.edu.ifpi.projetoeventos.models.enums.ProfileType;
-import br.edu.ifpi.projetoeventos.models.others.User;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class SignupActivity extends AppCompatActivity {
-    private static final String TAG = "SignupActivity";
+public class LoginActivity extends AppCompatActivity {
+    private static final String TAG = "LoginActivity";
+    private static final int REQUEST_SIGNUP = 0;
 
-    @InjectView(R.id.input_name) EditText _nameText;
     @InjectView(R.id.input_email) EditText _emailText;
     @InjectView(R.id.input_password) EditText _passwordText;
-    @InjectView(R.id.btn_signup) Button _signupButton;
-    @InjectView(R.id.link_login) TextView _loginLink;
+    @InjectView(R.id.btn_login) Button _loginButton;
+    @InjectView(R.id.link_signup) TextView _signupLink;
+
+    SignUpAndValidationDAO dao = new SignUpAndValidationDAO(this);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
-        setContentView(R.layout.activity_signup);
+        setContentView(R.layout.activity_login);
         ButterKnife.inject(this);
 
-        _signupButton.setOnClickListener(new View.OnClickListener() {
+        hideKeyboard(_emailText);
+
+        _loginButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                signup();
+                login();
             }
         });
 
-        _loginLink.setOnClickListener(new View.OnClickListener() {
+        _signupLink.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                finish();
+                Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
+                startActivityForResult(intent, REQUEST_SIGNUP);
+                overridePendingTransition(R.anim.slide_in_r, R.anim.slide_out_l);
             }
         });
-    }
-
-    @Override public void finish() {
-        super.finish();
-        overridePendingTransition(R.anim.slide_in_l, R.anim.slide_out_r);
     }
 
     public void hideKeyboard(View view) {
@@ -78,67 +80,83 @@ public class SignupActivity extends AppCompatActivity {
         return super.dispatchTouchEvent( event );
     }
 
-    public void signup() {
-        Log.d(TAG, "Signup");
+    public void login() {
+        Log.d(TAG, "Login");
 
         if (!validate()) {
-            onSignupFailed();
+            onLoginFailed();
             return;
         }
 
-        _signupButton.setEnabled(false);
+        _loginButton.setEnabled(false);
 
-        hideKeyboard(_signupButton);
-        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this, R.style.Dialog);
+        hideKeyboard(_loginButton);
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this, R.style.Dialog);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage(this.getString(R.string.creating_account));
+        progressDialog.setMessage(this.getString(R.string.authenticating));
         progressDialog.show();
 
-        String name = _nameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        SignUpAndValidationDAO dao = new SignUpAndValidationDAO(this);
-        dao.insert(new User(email, password, name, ProfileType.PARTICIPANT));
+        final boolean next = dao.validate(email, password);
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
-                        // On complete call either onSignupSuccess or onSignupFailed
-                        // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
+                        if (next) {
+                            onLoginSuccess();
+                        } else {
+                            onLoginFailed();
+                        }
                         progressDialog.dismiss();
                     }
                 }, 3000);
     }
 
 
-    public void onSignupSuccess() {
-        _signupButton.setEnabled(true);
-        setResult(RESULT_OK, null);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_SIGNUP) {
+            if (resultCode == RESULT_OK) {
+
+                // TODO: Implement successful signup logic here
+                // By default we just finish the Activity and log them in automatically
+                this.finish();
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // disable going back to the MainActivity
+        moveTaskToBack(true);
+    }
+
+    public void onLoginSuccess() {
+        _loginButton.setEnabled(true);
         finish();
     }
 
-    public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), this.getString(R.string.signup_failed), Toast.LENGTH_LONG).show();
+    public void onLoginFailed() {
+        if(validate()) {
+            if (dao.getUser(_emailText.getText().toString()).getEmail().equals("NONAME")) {
+                _emailText.setError(this.getString(R.string.non_user));
+            } else {
+                _passwordText.setError(this.getString(R.string.invalid_password));
+            }
+        }
 
-        _signupButton.setEnabled(true);
+        Toast.makeText(getBaseContext(), this.getResources().getString(R.string.login_failed), Toast.LENGTH_LONG).show();
+
+        _loginButton.setEnabled(true);
     }
 
     public boolean validate() {
         boolean valid = true;
 
-        String name = _nameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
-
-        if (name.isEmpty() || name.length() < 3) {
-            _nameText.setError(this.getString(R.string.above_3_char));
-            valid = false;
-        } else {
-            _nameText.setError(null);
-        }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             _emailText.setError(this.getString(R.string.invalid_email));

@@ -16,4 +16,7 @@
     <string name="signup_failed">Falha ao criar conta</string>
     <string name="above_3_char">Acima de 3 caracteres</string>
     <string name="creating_account">Criando conta...</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
