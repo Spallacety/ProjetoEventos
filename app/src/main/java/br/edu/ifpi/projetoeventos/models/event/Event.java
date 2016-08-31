@@ -65,12 +65,12 @@ public class Event {
 	}
 
 	public void setInitialDate(int day, int month, int year) {
-		Calendar data = Calendar.getInstance();
-		data.set(Calendar.YEAR, year);
-		data.set(Calendar.MONTH, (month-1));
-		data.set(Calendar.DAY_OF_MONTH, day);
-		if(data.getTimeInMillis() >= Calendar.getInstance(Locale.getDefault()).getTimeInMillis()){
-			this.initialDate = data;
+		Calendar date = Calendar.getInstance();
+		date.set(Calendar.YEAR, year);
+		date.set(Calendar.MONTH, (month-1));
+		date.set(Calendar.DAY_OF_MONTH, day);
+		if(date.getTimeInMillis() >= Calendar.getInstance(Locale.getDefault()).getTimeInMillis()){
+			this.initialDate = date;
 		}
 	}
 
