@@ -1,7 +1,5 @@
 package br.edu.ifpi.projetoeventos.models.others;
 
-import br.edu.ifpi.projetoeventos.models.enums.ProfileType;
-
 public class User {
 
     private String email;

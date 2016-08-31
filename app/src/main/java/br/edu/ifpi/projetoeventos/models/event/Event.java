@@ -7,12 +7,13 @@ import java.util.Locale;
 
 import br.edu.ifpi.projetoeventos.models.enums.EventStatus;
 import br.edu.ifpi.projetoeventos.models.enums.EventType;
-import br.edu.ifpi.projetoeventos.models.others.Institution;
+import br.edu.ifpi.projetoeventos.models.location.Location;
 
 public class Event {
 
 	protected String name;
-	protected Institution institution;
+	protected Location location;
+	private Event relatedEvent;
 	protected List<Activity> activityList = new ArrayList<>();
 	protected EventStatus status;
 	private EventType eventType;

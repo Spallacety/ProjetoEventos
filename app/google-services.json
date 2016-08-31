@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "518895872314",
+    "firebase_url": "https://projeto-eventos.firebaseio.com",
+    "project_id": "projeto-eventos",
+    "storage_bucket": "projeto-eventos.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:518895872314:android:2f2df105d96e88d4",
+        "android_client_info": {
+          "package_name": "br.edu.ifpi.projetoeventos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "518895872314-f7ame04safeklcl7j0pr65hpo3hgmare.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.edu.ifpi.projetoeventos",
+            "certificate_hash": "1F28EFDC58F1BD09483DD26E9278E848C6A862E9"
+          }
+        },
+        {
+          "client_id": "518895872314-357rmgfmlnuo7ge7s405ebnmo4iosp2p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9pWgFsT7nOY0Xa5zsV3xWXplR1Wb8C-s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "518895872314-357rmgfmlnuo7ge7s405ebnmo4iosp2p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -10,7 +10,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import br.edu.ifpi.projetoeventos.models.enums.ProfileType;
 import br.edu.ifpi.projetoeventos.models.others.User;
 
 public class SignUpAndValidationDAO extends SQLiteOpenHelper {

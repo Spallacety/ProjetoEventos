@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import br.edu.ifpi.projetoeventos.dao.SignUpAndValidationDAO;
-import br.edu.ifpi.projetoeventos.models.enums.ProfileType;
 import br.edu.ifpi.projetoeventos.models.others.User;
 
 import butterknife.ButterKnife;

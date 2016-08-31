@@ -15,27 +15,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import br.edu.ifpi.projetoeventos.dao.SignUpAndValidationDAO;
-import br.edu.ifpi.projetoeventos.models.enums.ProfileType;
 import br.edu.ifpi.projetoeventos.models.others.User;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
 
-    @InjectView(R.id.input_name) EditText _nameText;
-    @InjectView(R.id.input_email) EditText _emailText;
-    @InjectView(R.id.input_password) EditText _passwordText;
-    @InjectView(R.id.btn_signup) Button _signupButton;
-    @InjectView(R.id.link_login) TextView _loginLink;
+    @BindView(R.id.input_name) EditText _nameText;
+    @BindView(R.id.input_email) EditText _emailText;
+    @BindView(R.id.input_password) EditText _passwordText;
+    @BindView(R.id.btn_signup) Button _signupButton;
+    @BindView(R.id.link_login) TextView _loginLink;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_signup);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +98,7 @@ public class SignupActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
 
         SignUpAndValidationDAO dao = new SignUpAndValidationDAO(this);
-        dao.insert(new User(email, password, name, ProfileType.PARTICIPANT));
+        dao.insert(new User(email, password, name));
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
