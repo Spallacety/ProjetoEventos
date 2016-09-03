@@ -7,9 +7,6 @@ import java.util.List;
 
 import br.edu.ifpi.projetoeventos.R;
 
-/**
- * Created by Lucas on 31/08/2016.
- */
 public enum LocationType {
 
     NONE(R.string.none),

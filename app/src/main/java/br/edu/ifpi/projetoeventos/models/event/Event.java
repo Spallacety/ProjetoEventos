@@ -9,15 +9,16 @@ import br.edu.ifpi.projetoeventos.models.enums.EventStatus;
 import br.edu.ifpi.projetoeventos.models.enums.EventType;
 import br.edu.ifpi.projetoeventos.models.location.Location;
 
-public class Event {
+public class Event{
 
-	protected String name;
-	protected Location location;
+	private String id;
+	private String name;
+	private Location location;
 	private Event relatedEvent;
-	protected List<Activity> activityList = new ArrayList<>();
-	protected EventStatus status;
+	private List<Activity> activityList = new ArrayList<>();
+	private EventStatus status;
 	private EventType eventType;
-	protected Calendar initialDate;
+	private Calendar initialDate;
 
 	public Event(EventType eventType){
 		this.status = EventStatus.OPEN;
@@ -44,7 +45,15 @@ public class Event {
 		return false;
 	}
 
-	public String getName() {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
 		return this.name;
 	}
 

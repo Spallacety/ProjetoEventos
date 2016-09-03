@@ -17,18 +17,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity"/>
         <activity
             android:name=".LoginActivity"
+            android:theme="@style/LoginSignup"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".SignupActivity"
+            android:theme="@style/LoginSignup"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".DashboardActivity" />
-        <activity android:name=".EventActivity"></activity>
-
+        <activity android:name=".EventActivity" />
+        <activity android:name=".EditEventActivity"
+            android:label="@string/edit_event"
+            android:windowSoftInputMode="stateHidden" />
     </application>
 
 </manifest>

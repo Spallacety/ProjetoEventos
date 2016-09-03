@@ -5,7 +5,7 @@ import java.util.List;
 import br.edu.ifpi.projetoeventos.models.enums.LocationType;
 import br.edu.ifpi.projetoeventos.models.event.Activity;
 
-public class Location {
+public class Location{
 
 //    private LatLng coordinates;
     private LocationType locationType;

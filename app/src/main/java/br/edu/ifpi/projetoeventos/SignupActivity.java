@@ -2,8 +2,10 @@ package br.edu.ifpi.projetoeventos;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -14,14 +16,22 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import br.edu.ifpi.projetoeventos.dao.SignUpAndValidationDAO;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+
 import br.edu.ifpi.projetoeventos.models.others.User;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SignupActivity extends AppCompatActivity {
-    private static final String TAG = "SignupActivity";
+
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseAuth mAuth;
 
     @BindView(R.id.input_name) EditText _nameText;
     @BindView(R.id.input_email) EditText _emailText;
@@ -49,6 +59,27 @@ public class SignupActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+            }
+        };
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
     }
 
     @Override public void finish() {
@@ -78,7 +109,6 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void signup() {
-        Log.d(TAG, "Signup");
 
         if (!validate()) {
             onSignupFailed();
@@ -93,35 +123,38 @@ public class SignupActivity extends AppCompatActivity {
         progressDialog.setMessage(this.getString(R.string.creating_account));
         progressDialog.show();
 
-        String name = _nameText.getText().toString();
+        final String name = _nameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        SignUpAndValidationDAO dao = new SignUpAndValidationDAO(this);
-        dao.insert(new User(email, password, name));
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onSignupSuccess or onSignupFailed
-                        // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            onSignupSuccess();
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(name)
+                                    .build();
+                            user.updateProfile(profileUpdates);
+                        }
+                        else{
+                            onSignupFailed();
+                        }
                         progressDialog.dismiss();
                     }
-                }, 3000);
+                });
     }
 
-
     public void onSignupSuccess() {
-        _signupButton.setEnabled(true);
-        setResult(RESULT_OK, null);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
         finish();
     }
 
     public void onSignupFailed() {
         Toast.makeText(getBaseContext(), this.getString(R.string.signup_failed), Toast.LENGTH_LONG).show();
-
         _signupButton.setEnabled(true);
     }
 
@@ -132,25 +165,16 @@ public class SignupActivity extends AppCompatActivity {
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        if (name.isEmpty() || name.length() < 3) {
-            _nameText.setError(this.getString(R.string.above_3_char));
+        if (name.isEmpty() || name.length() < 6) {
             valid = false;
-        } else {
-            _nameText.setError(null);
         }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError(this.getString(R.string.invalid_email));
             valid = false;
-        } else {
-            _emailText.setError(null);
         }
 
-        if (password.isEmpty() || password.length() < 4) {
-            _passwordText.setError(this.getString(R.string.above_4_pass));
+        if (password.isEmpty() || password.length() < 6) {
             valid = false;
-        } else {
-            _passwordText.setError(null);
         }
 
         return valid;

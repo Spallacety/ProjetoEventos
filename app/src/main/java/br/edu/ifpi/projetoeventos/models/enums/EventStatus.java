@@ -1,6 +1,6 @@
 package br.edu.ifpi.projetoeventos.models.enums;
 
-public enum EventStatus {
+public enum EventStatus{
 
 	IN_PROGRESS("Em andamento"),
 	OPEN("Aberto"),
