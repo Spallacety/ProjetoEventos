@@ -1,16 +1,20 @@
 package br.edu.ifpi.projetoeventos.models.event;
 
+import com.google.firebase.database.Exclude;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 
 import br.edu.ifpi.projetoeventos.models.enums.ActivityType;
-import br.edu.ifpi.projetoeventos.models.event.Event;
-import br.edu.ifpi.projetoeventos.models.location.Location;
+import br.edu.ifpi.projetoeventos.models.others.Mappable;
 
-public class Activity{
+public class Activity extends Mappable{
 
     private String id;
 	protected BigDecimal value;
@@ -30,6 +34,11 @@ public class Activity{
         return obrigatoryTypes;
     }
 
+    Activity(){
+        setID(UUID.randomUUID().toString());
+        setValue(BigDecimal.ZERO);
+    }
+
     public Activity(String name, String value, ActivityType activityType, Calendar startTime, Calendar endTime, Location location){
 		this.name = name;
 		this.value = new BigDecimal(value);
@@ -44,15 +53,27 @@ public class Activity{
         }
 	}
 
+    public Activity(String id){
+        setID(id);
+    }
+
 	public BigDecimal getValue() {
 		return value;
 	}
 
-	public String getName() {
+    public void setValue(BigDecimal value) {
+        this.value = value;
+    }
+
+    public String getName() {
 		return name;
 	}
 
-	public Event getEvent() {
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Event getEvent() {
 		return event;
 	}
 
@@ -63,6 +84,10 @@ public class Activity{
 	public ActivityType getActivityType(){
 		return this.activityType;
 	}
+
+    public void setActivityType(ActivityType activityType) {
+        this.activityType = activityType;
+    }
 
     public Location getLocation(){
         return location;
@@ -107,4 +132,55 @@ public class Activity{
     public boolean isObrigatory() {
         return obrigatory;
     }
+
+    public void setObrigatory(boolean obrigatory) {
+        this.obrigatory = obrigatory;
+    }
+
+    @Override
+    @Exclude
+    public void fromMap(Map<String, Object> map)  {
+        if(map != null) {
+            setID((String) map.get("ID"));
+            setName((String) map.get("name"));
+            setValue(BigDecimal.valueOf(Double.valueOf(String.valueOf(map.get("price")))));
+            Calendar c = Calendar.getInstance();
+			c.setTimeInMillis((long) map.get("startTime"));
+            this.startTime = c;
+            c.setTimeInMillis((long) map.get("endTime"));
+            this.endTime = c;
+            setActivityType(ActivityType.fromName((String) map.get("type")));
+            this.event = new Event((String) map.get("event"));
+            this.location = new Location((String) map.get("location"));
+        }
+
+    }
+
+    @Exclude
+    @Override
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("ID", getID());
+        result.put("name", getName());
+        result.put("price", String.valueOf(getValue().doubleValue()));
+        result.put("startDate", getStartTime().getTimeInMillis());
+        result.put("endingDate", getEndTime().getTimeInMillis());
+        result.put("type", getActivityType().name());
+        result.put("event", getEvent().getID());
+        result.put("location", getLocation().getID());
+        return result;
+    }
+
+    public static Map<String, Object> getListMap(List<Activity> list){
+        if(list != null && !list.isEmpty()){
+            Map<String, Object> hashMap = new HashMap<>();
+            hashMap.put("size", list.size());
+            for (int i = 0; i < list.size(); i++) {
+                hashMap.put(String.valueOf(i), list.get(i).getID());
+            }
+            return hashMap;
+        }
+        return null;
+    }
+
 }

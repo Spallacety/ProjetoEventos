@@ -3,28 +3,25 @@ package br.edu.ifpi.projetoeventos;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import br.edu.ifpi.projetoeventos.models.others.MyActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends MyActivity {
 
     private FirebaseAuth mAuth;
 
-    @BindView(R.id.hello_world) TextView _helloWorld;
     @BindView(R.id.button_main) Button button;
 
     @Override
@@ -37,23 +34,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        setContentView(R.layout.activity_main);
-
-//        TextView _helloWorld = (TextView)findViewById(R.id.hello_world);
-//        Button button = (Button)findViewById(R.id.button_main);
-
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
-        _helloWorld.setText("Hello, " + user.getDisplayName());
+
         Toast.makeText(this, user.getDisplayName(), Toast.LENGTH_LONG).show();
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, EditEventActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+    }
+
+    public void button(View v){
+        Intent intent = new Intent(this, EditLocationActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void button2(View v){
+        Intent intent = new Intent(this, EditEventActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

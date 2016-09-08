@@ -1,9 +1,10 @@
 package br.edu.ifpi.projetoeventos;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class DashboardActivity extends AppCompatActivity {
+import br.edu.ifpi.projetoeventos.models.others.MyActivity;
+
+public class DashboardActivity extends MyActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

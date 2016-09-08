@@ -10,7 +10,9 @@
     <string name="authenticating">Autenticando...</string>
     <string name="login_failed">Usuário ou senha inválidos</string>
     <string name="signup_failed">Falha ao criar conta</string>
+    <string name="signup_success">Conta criada! Faça o login</string>
     <string name="creating_account">Criando conta...</string>
+    <string name="save">Salvar</string>
     <string name="none">Nenhum</string>
     <string name="building">Prédio</string>
     <string name="floor">Andar</string>
@@ -31,7 +33,18 @@
     <string name="edit_event">Editar evento</string>
     <string name="logout">Desconectar-se</string>
     <string name="logout_confirm">Você será desconectado.</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="cancel">Cancelar</string>
+    <string name="edit_location">Editar localização</string>
+    <string name="pick_location">Escolher local</string>
+    <string name="event_status_in_progress">Em andamento</string>
+    <string name="event_status_open">Aberto</string>
+    <string name="event_status_finished">Finalizado</string>
+    <string name="event_status_canceled">Cancelado</string>
+    <string name="from">De</string>
+    <string name="to">até</string>
+    <string name="initial_day">dia inicial</string>
+    <string name="final_day">dia final</string>
+    <string name="activities">Atividades</string>
 
 </resources>

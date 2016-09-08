@@ -1,9 +1,10 @@
 package br.edu.ifpi.projetoeventos;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class EventActivity extends AppCompatActivity {
+import br.edu.ifpi.projetoeventos.models.others.MyActivity;
+
+public class EventActivity extends MyActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

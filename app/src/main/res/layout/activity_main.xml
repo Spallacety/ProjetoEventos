@@ -10,14 +10,16 @@
     android:orientation="vertical"
     tools:context="br.edu.ifpi.projetoeventos.MainActivity">
 
-    <TextView
-        android:id="@+id/hello_world"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="" />
-
     <Button
         android:id="@+id/button_main"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:onClick="button"
+        android:text="location"/>
+    <Button
+        android:id="@+id/button2_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="button2"
+        android:text="event"/>
 </LinearLayout>
