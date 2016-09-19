@@ -14,8 +14,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 
+import br.edu.ifpi.projetoeventos.firebase.UserDAO;
+import br.edu.ifpi.projetoeventos.models.event.Factory;
+import br.edu.ifpi.projetoeventos.models.event.User;
 import br.edu.ifpi.projetoeventos.models.others.MyActivity;
 
 import butterknife.BindView;
@@ -96,7 +98,7 @@ public class SignupActivity extends MyActivity {
         progressDialog.show();
 
         final String name = _nameText.getText().toString();
-        String email = _emailText.getText().toString();
+        final String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -105,11 +107,6 @@ public class SignupActivity extends MyActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             onSignupSuccess();
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(name)
-                                    .build();
-                            user.updateProfile(profileUpdates);
                         }
                         else{
                             onSignupFailed();
@@ -120,6 +117,12 @@ public class SignupActivity extends MyActivity {
     }
 
     public void onSignupSuccess() {
+        FirebaseUser userF = FirebaseAuth.getInstance().getCurrentUser();
+        User user = Factory.makeUser();
+        user.setID(userF.getUid());
+        user.setEmail(_emailText.getText().toString());
+        user.setName(_nameText.getText().toString());
+        UserDAO.getInstance().save(user);
         Toast.makeText(getBaseContext(), this.getString(R.string.signup_success), Toast.LENGTH_LONG).show();
         finish();
     }

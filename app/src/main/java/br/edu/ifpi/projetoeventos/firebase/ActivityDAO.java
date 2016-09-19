@@ -38,8 +38,8 @@ public class ActivityDAO {
         FirebaseDatabase.getInstance().getReference().child(KEY_NAME).child(activity.getID()).removeValue();
     }
 
-    public List<Activity> getAll() {
-        final List<Activity> result = new ArrayList<>();
+    public ArrayList<Activity> getAll() {
+        final ArrayList<Activity> result = new ArrayList<>();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -70,7 +70,7 @@ public class ActivityDAO {
     }
 
     public Activity findById(final @NonNull String id){
-        List<Activity> list = getAll();
+        ArrayList<Activity> list = getAll();
         Activity result = Factory.makeActivity();
         for (Activity activity : list) {
             if(activity.getID().equals(id)) {

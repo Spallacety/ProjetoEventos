@@ -13,6 +13,7 @@ import br.edu.ifpi.projetoeventos.models.event.Activity;
 import br.edu.ifpi.projetoeventos.models.enums.ActivityType;
 import br.edu.ifpi.projetoeventos.models.coupon.Coupon;
 import br.edu.ifpi.projetoeventos.models.event.Event;
+import br.edu.ifpi.projetoeventos.models.event.Factory;
 import br.edu.ifpi.projetoeventos.models.others.Inscription;
 
 import junit.framework.Assert;
@@ -37,16 +38,28 @@ public class CouponTest {
 
 	@Test
 	public void deve_aplicar_cupom_de_uma_unica_atividade() throws PaidInscriptionException, InscriptionAlreadyContainsActivityException, ActivityIsNotFromThisEventException, EventNotOpenException {
-		Activity lecture = new Activity("Lecture", "300", ActivityType.LECTURE);
-		Activity minicourse = new Activity("Minicourse", "300", ActivityType.MINICOURSE);
-		Activity minicourse2 = new Activity("Minicourse", "300", ActivityType.MINICOURSE);
-		Event symposium = new Event(EventType.SYMPOSIUM);
+		Activity lecture = Factory.makeActivity();
+		lecture.setName("Lecture");
+		lecture.setValue(new BigDecimal("300"));
+		lecture.setActivityType(ActivityType.LECTURE);
+		Activity minicourse = Factory.makeActivity();
+		minicourse.setName("Minicourse");
+		minicourse.setValue(new BigDecimal("300"));
+		minicourse.setActivityType(ActivityType.MINICOURSE);
+		Activity minicourse2 = Factory.makeActivity();
+		minicourse2.setName("Minicourse");
+		minicourse2.setValue(new BigDecimal("300"));
+		minicourse2.setActivityType(ActivityType.MINICOURSE);
+		Event symposium = Factory.makeEvent();
+		symposium.setEventType(EventType.SYMPOSIUM);
 		symposium.addActivity(lecture);
 		symposium.addActivity(minicourse);
 		symposium.addActivity(minicourse2);
 		ActivityCoupon coupon = new ActivityCoupon("0.5");
 		coupon.setExpirationDate(1, 10, 2500);
-		coupon.setActivity(new Activity("Test", "0", ActivityType.MINICOURSE));
+		Activity activity = Factory.makeActivity();
+		activity.setActivityType(ActivityType.MINICOURSE);
+		coupon.setActivity(activity);
 		Inscription inscription = new Inscription(symposium);
 		inscription.addActivity(lecture);
 		inscription.addActivity(minicourse);

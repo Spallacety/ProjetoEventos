@@ -17,6 +17,7 @@ import br.edu.ifpi.projetoeventos.models.enums.EventType;
 import br.edu.ifpi.projetoeventos.models.event.Activity;
 import br.edu.ifpi.projetoeventos.models.enums.ActivityType;
 import br.edu.ifpi.projetoeventos.models.event.Event;
+import br.edu.ifpi.projetoeventos.models.event.Factory;
 import br.edu.ifpi.projetoeventos.models.others.Inscription;
 
 public class InscriptionTest {
@@ -29,10 +30,18 @@ public class InscriptionTest {
 
 	@Before
 	public void init(){
-		symposium = new Event(EventType.SYMPOSIUM);
-		congress = new Event(EventType.CONGRESS);
-		lecture = new Activity("Lecture", "300", ActivityType.LECTURE);
-		panelDiscussion = new Activity("Panel Discussion", "200", ActivityType.PANEL_DISCUSSION);
+		symposium = Factory.makeEvent();
+		symposium.setEventType(EventType.SYMPOSIUM);
+		congress = Factory.makeEvent();
+		congress.setEventType(EventType.CONGRESS);
+		lecture = Factory.makeActivity();
+		lecture.setName("Lecture");
+		lecture.setValue(new BigDecimal("300"));
+		lecture.setActivityType(ActivityType.LECTURE);
+		panelDiscussion = Factory.makeActivity();
+		panelDiscussion.setName("Panel Discussion");
+		panelDiscussion.setValue(new BigDecimal("200"));
+		panelDiscussion.setActivityType(ActivityType.PANEL_DISCUSSION);
 	}
 
 	@Test

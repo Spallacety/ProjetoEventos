@@ -50,8 +50,8 @@ public class EventDAO {
         FirebaseDatabase.getInstance().getReference().child(KEY_NAME).child(event.getID()).removeValue();
     }
 
-    public List<Event> getAll(){
-        final List<Event> result = new ArrayList<>();
+    public ArrayList<Event> getAll(){
+        final ArrayList<Event> result = new ArrayList<>();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -106,9 +106,9 @@ public class EventDAO {
         return null;
     }
 
-    public List<Activity> getActivities(final @NonNull Event event){
-        List<Activity> activityList = ActivityDAO.getInstance().getAll();
-        List<Activity> result = new ArrayList<>();
+    public ArrayList<Activity> getActivityList(final @NonNull Event event){
+        ArrayList<Activity> activityList = ActivityDAO.getInstance().getAll();
+        ArrayList<Activity> result = new ArrayList<>();
 
         for (int i = 0; i < event.getActivityList().size(); i++) {
             for (int j = 0; j < activityList.size(); j++) {
@@ -145,7 +145,7 @@ public class EventDAO {
             for (Event event : list) {
                 if(event.getID().equals(id)){
                     event.setLocation(getLocation(event));
-                    event.setActivityList(getActivities(event));
+                    event.setActivityList(getActivityList(event));
 //                    retrieveParticipants(event);
 //                    event = retrieveRelatedEvents(event, list);
                     result = event;

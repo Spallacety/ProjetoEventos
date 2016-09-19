@@ -2,58 +2,39 @@ package br.edu.ifpi.projetoeventos.models.event;
 
 import com.google.firebase.database.Exclude;
 
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.ZoneOffset;
+
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
 import br.edu.ifpi.projetoeventos.models.enums.ActivityType;
 import br.edu.ifpi.projetoeventos.models.others.Mappable;
 
-public class Activity extends Mappable{
+public class Activity extends Mappable implements Serializable{
 
-    private String id;
 	protected BigDecimal value;
 	protected String name;
 	protected Event event;
-	private Calendar startTime;
-	private Calendar endTime;
+	private LocalDateTime startTime;
+	private LocalDateTime endTime;
     private Location location;
 	private ActivityType activityType;
     private boolean obrigatory = false;
-
-    public List<ActivityType> getObrigatoryTypes() {
-        List<ActivityType> obrigatoryTypes = new ArrayList<>();
-        obrigatoryTypes.add(ActivityType.COFFEEBREAK);
-        obrigatoryTypes.add(ActivityType.INTERVAL);
-        obrigatoryTypes.add(ActivityType.REGISTRATION);
-        return obrigatoryTypes;
-    }
+    private String responsible;
+    private String responsibleBio;
 
     Activity(){
         setID(UUID.randomUUID().toString());
         setValue(BigDecimal.ZERO);
     }
 
-    public Activity(String name, String value, ActivityType activityType, Calendar startTime, Calendar endTime, Location location){
-		this.name = name;
-		this.value = new BigDecimal(value);
-		this.activityType = activityType;
-		this.startTime = startTime;
-		this.endTime = endTime;
-        this.location = location;
-        for (ActivityType t : getObrigatoryTypes()) {
-            if(activityType.equals(t)){
-                this.obrigatory = true;
-            }
-        }
-	}
-
-    public Activity(String id){
+    Activity(String id){
         setID(id);
     }
 
@@ -97,36 +78,20 @@ public class Activity extends Mappable{
         this.location = location;
     }
 
-    public Calendar getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public Calendar getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-	private void setStartTime(int hour, int minutes, int day, int month, int year) {
-        Calendar time = Calendar.getInstance();
-        time.set(Calendar.HOUR_OF_DAY, hour);
-        time.set(Calendar.MINUTE, minutes);
-        time.set(Calendar.YEAR, year);
-        time.set(Calendar.MONTH, (month-1));
-        time.set(Calendar.DAY_OF_MONTH, day);
-        if(time.getTimeInMillis() >= Calendar.getInstance(Locale.getDefault()).getTimeInMillis()){
-            this.startTime = time;
-        }
+	private void setStartTime(LocalDateTime time) {
+        if(time.isAfter(LocalDateTime.now())) this.startTime = time;
 	}
 
-	private void setEndTime(int hour, int minutes, int day, int month, int year) {
-        Calendar time = Calendar.getInstance();
-        time.set(Calendar.HOUR_OF_DAY, hour);
-        time.set(Calendar.MINUTE, minutes);
-        time.set(Calendar.YEAR, year);
-        time.set(Calendar.MONTH, (month-1));
-        time.set(Calendar.DAY_OF_MONTH, day);
-        if(time.getTimeInMillis() >= getStartTime().getTimeInMillis()){
-            this.endTime = time;
-        }
+	private void setEndTime(LocalDateTime time) {
+        if(time.isAfter(getStartTime())) this.endTime = time;
 	}
 
     public boolean isObrigatory() {
@@ -137,23 +102,23 @@ public class Activity extends Mappable{
         this.obrigatory = obrigatory;
     }
 
+    public void setResponsibleData(String responsible, String bio){
+        this.responsible = responsible;
+        this.responsibleBio = bio;
+    }
+
     @Override
     @Exclude
     public void fromMap(Map<String, Object> map)  {
         if(map != null) {
             setID((String) map.get("ID"));
             setName((String) map.get("name"));
-            setValue(BigDecimal.valueOf(Double.valueOf(String.valueOf(map.get("price")))));
-            Calendar c = Calendar.getInstance();
-			c.setTimeInMillis((long) map.get("startTime"));
-            this.startTime = c;
-            c.setTimeInMillis((long) map.get("endTime"));
-            this.endTime = c;
+            setStartTime(LocalDateTime.ofEpochSecond((long) map.get("startTime"), 0, ZoneOffset.UTC));
+            setEndTime(LocalDateTime.ofEpochSecond((long) map.get("endTime"), 0, ZoneOffset.UTC));
             setActivityType(ActivityType.fromName((String) map.get("type")));
             this.event = new Event((String) map.get("event"));
             this.location = new Location((String) map.get("location"));
         }
-
     }
 
     @Exclude
@@ -163,8 +128,8 @@ public class Activity extends Mappable{
         result.put("ID", getID());
         result.put("name", getName());
         result.put("price", String.valueOf(getValue().doubleValue()));
-        result.put("startDate", getStartTime().getTimeInMillis());
-        result.put("endingDate", getEndTime().getTimeInMillis());
+        result.put("startTime", getStartTime().toEpochSecond(ZoneOffset.UTC));
+        result.put("endTime", getEndTime().toEpochSecond(ZoneOffset.UTC));
         result.put("type", getActivityType().name());
         result.put("event", getEvent().getID());
         result.put("location", getLocation().getID());

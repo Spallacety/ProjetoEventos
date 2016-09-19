@@ -45,6 +45,15 @@
     <string name="to">até</string>
     <string name="initial_day">dia inicial</string>
     <string name="final_day">dia final</string>
+    <string name="initial_hour">hora inicial</string>
+    <string name="final_hour">hora final</string>
     <string name="activities">Atividades</string>
+    <string name="related_location">Locais relacionados</string>
+    <string name="obrigatory">Obrigatório</string>
+    <string name="new_event">Novo evento</string>
+    <string name="activity_list">Lista de atividades</string>
+    <string name="add">Adicionar</string>
+    <string name="activity_list_empty">A lista de atividades está vazia!</string>
+    <string name="edit_activity">Editar atividade</string>
 
 </resources>

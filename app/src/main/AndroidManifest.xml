@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.edu.ifpi.projetoeventos">
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
@@ -12,6 +13,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
         <activity
             android:name=".SplashActivity"
             android:theme="@style/SplashTheme">
@@ -21,26 +23,35 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity" />
         <activity
             android:name=".LoginActivity"
             android:theme="@style/LoginSignup"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".SignupActivity"
             android:theme="@style/LoginSignup"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".DashboardActivity"/>
-        <activity android:name=".EventActivity"/>
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".DashboardActivity" />
+        <activity android:name=".EventActivity" />
         <activity
             android:name=".EditEventActivity"
             android:label="@string/edit_event"
             android:theme="@style/EditScreen"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".EditLocationActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".EditLocationActivity"
             android:label="@string/edit_location"
             android:theme="@style/EditScreen"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".EditActivityActivity"
+            android:label="@string/edit_activity"
+            android:theme="@style/EditScreen"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ActivityListActivity"
+            android:label="@string/activity_list"/>
     </application>
 
 </manifest>

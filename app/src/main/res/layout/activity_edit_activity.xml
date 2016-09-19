@@ -8,7 +8,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:fitsSystemWindows="true"
-    tools:context="br.edu.ifpi.projetoeventos.EditEventActivity">
+    tools:context="br.edu.ifpi.projetoeventos.EditActivityActivity">
 
     <LinearLayout
         android:orientation="vertical"
@@ -26,24 +26,9 @@
             <EditText android:id="@+id/event_edit_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimaryDark"
                 android:hint="@string/name"/>
 
         </android.support.design.widget.TextInputLayout>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
-            android:layout_marginBottom="8dp"
-            android:drawableLeft="@drawable/marker32"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:textAllCaps="false"
-            android:textAlignment="textStart"
-            android:textSize="18sp"
-            android:text="@string/location"
-            android:onClick="openLocationScreen"/>
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -57,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="16dp"/>
-
+        
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
@@ -67,17 +52,13 @@
             android:focusableInTouchMode="true"
             android:layout_gravity="center">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/from"/>
-
-            <Button
+'            <Button
+                android:id="@+id/initial_hour"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:textColor="@color/colorPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/initial_day"></Button>
+                android:text="@string/initial_hour"></Button>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -85,24 +66,42 @@
                 android:text="@string/to"/>
 
             <Button
+                android:id="@+id/final_hour"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:textColor="@color/colorPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/final_day"></Button>
+                android:text="@string/final_hour"></Button>
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/edit_event_activity_list"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableTop="@drawable/activities64"
-            android:layout_gravity="center"
-            android:text="@string/activities"
-            android:textColor="@color/colorPrimary"
-            android:onClick="openActivityListScreen"/>
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/obrigatory"/>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <Button
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/lightGreen"
+                android:text="preço"
+                android:layout_gravity="center"
+                android:gravity="right"/>
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/event_save"
             android:backgroundTint="@color/buttonColor"

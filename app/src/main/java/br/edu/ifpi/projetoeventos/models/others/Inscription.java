@@ -1,5 +1,7 @@
 package br.edu.ifpi.projetoeventos.models.others;
 
+import org.threeten.bp.LocalDateTime;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,12 +17,13 @@ import br.edu.ifpi.projetoeventos.models.coupon.GeneralCoupon;
 import br.edu.ifpi.projetoeventos.models.enums.EventStatus;
 import br.edu.ifpi.projetoeventos.models.event.Activity;
 import br.edu.ifpi.projetoeventos.models.event.Event;
+import br.edu.ifpi.projetoeventos.models.event.User;
 
 public class Inscription {
 
 	private User user;
 	private boolean paid = false;
-	private Calendar paidDate;
+	private LocalDateTime paidDate;
 	private BigDecimal value;
 	private Event event;
 	private List<Activity> registeredActivityList = new ArrayList<>();
@@ -80,7 +83,7 @@ public class Inscription {
 		BigDecimal tempValue = new BigDecimal(value);
 		if(tempValue.compareTo(this.value) == 0){
 			paid = true;
-			paidDate = Calendar.getInstance();
+			paidDate = LocalDateTime.now();
 		}
 		return isPaid();
 	}

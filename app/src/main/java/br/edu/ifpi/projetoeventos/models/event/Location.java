@@ -2,6 +2,7 @@ package br.edu.ifpi.projetoeventos.models.event;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.UUID;
 import br.edu.ifpi.projetoeventos.models.enums.LocationType;
 import br.edu.ifpi.projetoeventos.models.others.Mappable;
 
-public class Location extends Mappable{
+public class Location extends Mappable implements Serializable {
 
     private LatLng coordinates;
     private LocationType locationType;

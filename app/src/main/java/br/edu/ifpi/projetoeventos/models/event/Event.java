@@ -1,14 +1,14 @@
 package br.edu.ifpi.projetoeventos.models.event;
 
-import android.util.Log;
-
 import com.google.firebase.database.Exclude;
 
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.ZoneOffset;
+
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -16,29 +16,24 @@ import br.edu.ifpi.projetoeventos.models.enums.EventStatus;
 import br.edu.ifpi.projetoeventos.models.enums.EventType;
 import br.edu.ifpi.projetoeventos.models.others.Mappable;
 
-public class Event extends Mappable{
+public class Event extends Mappable implements Serializable {
 
 	private String name;
 	private Location location;
-	private Event relatedEvent;
-	private List<Activity> activityList = new ArrayList<>();
+	private Event parentEvent;
+	private ArrayList<Activity> activityList = new ArrayList<>();
 	private EventStatus status;
 	private EventType eventType;
-	private Calendar initialDate;
-	private Calendar finalDate;
+	private LocalDateTime initialDate;
+	private LocalDateTime finalDate;
+	private List<User> team = new ArrayList<>();
 
 	Event(){
         setID(UUID.randomUUID().toString());
         setStatus(EventStatus.OPEN);
     }
 
-    public Event(String name, Location location){
-        this.name = name;
-        setID(UUID.randomUUID().toString());
-        setStatus(EventStatus.OPEN);
-    }
-
-	public Event(String id){
+	Event(String id){
 		setID(id);
 		setStatus(EventStatus.OPEN);
 	}
@@ -75,11 +70,11 @@ public class Event extends Mappable{
 		this.location = location;
 	}
 
-	public List<Activity> getActivityList() {
+	public ArrayList<Activity> getActivityList() {
 		return this.activityList;
 	}
 
-	public void setActivityList(List<Activity> activityList) {
+	public void setActivityList(ArrayList<Activity> activityList) {
 		this.activityList = activityList;
 	}
 
@@ -91,84 +86,73 @@ public class Event extends Mappable{
         this.status = status;
     }
 
-    public Calendar getInitialDate() {
-		return this.initialDate;
+	public EventType getEventType() {
+		return eventType;
 	}
 
-	public void setInitialDate(int day, int month, int year) {
-		Calendar date = Calendar.getInstance();
-		date.set(Calendar.YEAR, year);
-		date.set(Calendar.MONTH, (month-1));
-		date.set(Calendar.DAY_OF_MONTH, day);
-		if(date.getTimeInMillis() >= Calendar.getInstance(Locale.getDefault()).getTimeInMillis()){
-			this.initialDate = date;
-		}
+	public void setEventType(EventType eventType) {
+		this.eventType = eventType;
 	}
 
-    public Calendar getFinalDate() {
-        return finalDate;
-    }
+	public LocalDateTime getInitialDate() {
+		return initialDate;
+	}
 
-    public void setFinalDate(int day, int month, int year) {
-        Calendar date = Calendar.getInstance();
-        date.set(Calendar.YEAR, year);
-        date.set(Calendar.MONTH, (month-1));
-        date.set(Calendar.DAY_OF_MONTH, day);
-        if(date.getTimeInMillis() >= getInitialDate().getTimeInMillis()){
-            this.finalDate = date;
-        }
-    }
+	public LocalDateTime getFinalDate() {
+		return finalDate;
+	}
 
-    @Exclude
+	public void setInitialDate(LocalDateTime date) {
+		if(date.isAfter(LocalDateTime.now())) this.initialDate = date;
+	}
+
+	public void setFinalDate(LocalDateTime date) {
+		if(date.isAfter(getInitialDate())) this.finalDate = date;
+	}
+
+	public Event getParentEvent() {
+		return parentEvent;
+	}
+
+	public void setParentEvent(Event parentEvent) {
+		this.parentEvent = parentEvent;
+	}
+
+	public List<User> getTeam() {
+		return team;
+	}
+
+	public void setTeam(List<User> team) {
+		this.team = team;
+	}
+
+	@Exclude
 	@Override
 	public void fromMap(Map<String, Object> map){
-		if(map == null) Log.i("Event", "Received map is null, aborting conversion");
-		else{
+		if(map != null) {
 			setID((String) map.get("ID"));
 			setName((String) map.get("name"));
-			Calendar c = Calendar.getInstance();
-			c.setTimeInMillis((long) map.get("initialDate"));
-			this.initialDate = c;
-            c.setTimeInMillis((long) map.get("finalDate"));
-			this.finalDate = c;
+			setInitialDate(LocalDateTime.ofEpochSecond((long) map.get("initialDate"), 0, ZoneOffset.UTC));
+			setFinalDate(LocalDateTime.ofEpochSecond((long) map.get("finalDate"), 0, ZoneOffset.UTC));
 			setStatus(EventStatus.valueOf((String) map.get("status")));
-//			setRelatedEvent(new Event((String) map.get("relatedEvent")));
-//			setLocation(new Location((String) map.get("location")));
+			setParentEvent(new Event((String) map.get("parentEvent")));
+			setLocation(new Location((String) map.get("location")));
 
-			//
+			Map<String, Object> activityList = (Map<String, Object>) map.get("activityList");
+			if(activityList != null && !activityList.isEmpty()){
+				int size = Integer.valueOf(String.valueOf(activityList.get("size")));
+				for (int i = 0; i < size; i++) {
+					getActivityList().add(new Activity((String) activityList.get(String.valueOf(i))));
+				}
+			}
 
-//			Map<String, Object> relatedEvents = (Map<String, Object>) map.get("related");
-//			if(relatedEvents != null && !relatedEvents.isEmpty()){
-//				int size = Integer.valueOf(String.valueOf(relatedEvents.get("size")));
-//				for (int i = 0; i < size; i++) {
-//					getRelatedEvents().add(new Event((String) relatedEvents.get(String.valueOf(i))));
-//				}
-//			}
-//
-//			Map<String, Object> activities = (Map<String, Object>) map.get("activities");
-//			if(activities != null && !activities.isEmpty()){
-//				int size = Integer.valueOf(String.valueOf(activities.get("size")));
-//				for (int i = 0; i < size; i++) {
-//					getActivities().add(new Activity((String) activities.get(String.valueOf(i))));
-//				}
-//			}
-//
-//			Map<String, Object> participants = (Map<String, Object>) map.get("participants");
-//			if(participants != null && !participants.isEmpty()){
-//				int size = Integer.valueOf(String.valueOf(participants.get("size")));
-//				for (int i = 0; i < size; i++) {
-//					getParticipants().add(new Participant((String) participants.get(String.valueOf(i))));
-//				}
-//			}
-//
-//			Map<String, Object> entries = (Map<String, Object>) map.get("entries");
-//			if(entries != null && !entries.isEmpty()){
-//				int size = Integer.valueOf(String.valueOf(entries.get("size")));
-//				for (int i = 0; i < size; i++) {
-//					getEntries().add(new Entry((String) entries.get(String.valueOf(i))));
-//				}
-//			}
-//
+			Map<String, Object> team = (Map<String, Object>) map.get("team");
+			if(team != null && !team.isEmpty()){
+				int size = Integer.valueOf(String.valueOf(team.get("size")));
+				for (int i = 0; i < size; i++) {
+					getTeam().add(new User((String) team.get(String.valueOf(i))));
+				}
+			}
 		}
 	}
 
@@ -178,27 +162,17 @@ public class Event extends Mappable{
 		HashMap<String, Object> result = new HashMap<>();
 		result.put("ID", getID());
 		result.put("name", getName());
-		result.put("initialDate", getInitialDate().getTimeInMillis());
-		result.put("endingDate", getFinalDate().getTimeInMillis());
+		result.put("initialDate", getInitialDate().toEpochSecond(ZoneOffset.UTC));
+		result.put("finalDate", getFinalDate().toEpochSecond(ZoneOffset.UTC));
         result.put("status", getStatus().name());
-//		result.put("relatedEvent", getRelatedEvent().getID());
-//		result.put("location", getLocation().getID());
+		result.put("parentEvent", getParentEvent().getID());
+		result.put("location", getLocation().getID());
 
-//		Map<String, Object> relatedEvents = getListMap(getRelatedEvents());
+		Map<String, Object> activityList = Activity.getListMap(getActivityList());
+		if(activityList != null) result.put("activityList", activityList);
 
-//		if(relatedEvents != null) result.put("related", relatedEvents);
-
-//		Map<String, Object> activities = Activity.getListMap(getActivityList());
-
-//		if(activities != null) result.put("activities", activities);
-
-//		Map<String, Object> participant = Participant.getListMap(getParticipants());
-
-//		if(participant != null) result.put("participants", participant);
-
-//		Map<String, Object> entries = Entry.getListMap(getEntries());
-
-//		if(entries != null) result.put("entries", entries);
+		Map<String, Object> team = User.getListMap(getTeam());
+		if(team != null) result.put("team", team);
 
 		return result;
 	}
