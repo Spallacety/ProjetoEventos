@@ -15,6 +15,7 @@ import java.util.List;
 
 import br.edu.ifpi.projetoeventos.firebase.LocationDAO;
 import br.edu.ifpi.projetoeventos.models.enums.LocationType;
+import br.edu.ifpi.projetoeventos.models.event.Event;
 import br.edu.ifpi.projetoeventos.models.event.Factory;
 import br.edu.ifpi.projetoeventos.models.event.Location;
 import br.edu.ifpi.projetoeventos.models.others.MyActivity;
@@ -23,14 +24,17 @@ import butterknife.ButterKnife;
 
 public class EditLocationActivity extends MyActivity {
 
+    public final static int PICK_PLACE = 2;
+    public final static int ADD_NEW_LOCATION = 256;
+
     @BindView(R.id.location_edit_description) EditText description;
     @BindView(R.id.location_edit_coordinates) Button coordinates;
     @BindView(R.id.location_edit_type) Spinner types;
     @BindView(R.id.location_edit_save) Button save;
 
-    public final static int PICK_PLACE = 2;
     private Location location;
     private List<String> translatedTypes;
+    private Event editEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +42,13 @@ public class EditLocationActivity extends MyActivity {
         setContentView(R.layout.activity_edit_location);
         ButterKnife.bind(this);
 
-        location = Factory.makeLocation();
+        editEvent = (Event) getIntent().getSerializableExtra("event");
+
+        if(editEvent.getLocation() != null){
+            location =  editEvent.getLocation();
+        }
+
+        else location = Factory.makeLocation();
 
         hideKeyboard(description);
     }
@@ -56,15 +66,6 @@ public class EditLocationActivity extends MyActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
-        });
-
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                location.setDescription(description.getText().toString());
-                location.setLocationType(LocationType.fromTranslatedName(getApplicationContext(), translatedTypes.get(types.getSelectedItemPosition())));
-                LocationDAO.getInstance().save(location);
             }
         });
 
@@ -97,5 +98,15 @@ public class EditLocationActivity extends MyActivity {
             if(locationType.getTranslatedName(getApplicationContext()).equals(translatedTypes.get(i))){position = i;}
         }
         return position;
+    }
+
+    public void saveLocation(View v){
+        location.setDescription(description.getText().toString());
+        location.setAddress(coordinates.getText().toString());
+        location.setLocationType(LocationType.fromTranslatedName(getApplicationContext(), translatedTypes.get(types.getSelectedItemPosition())));
+        Intent result = new Intent();
+        result.putExtra("location", location);
+        setResult(RESULT_OK, result);
+        finish();
     }
 }

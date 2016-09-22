@@ -26,6 +26,7 @@ public class Event extends Mappable implements Serializable {
 	private EventType eventType;
 	private LocalDateTime initialDate;
 	private LocalDateTime finalDate;
+	private User owner;
 	private List<User> team = new ArrayList<>();
 
 	Event(){
@@ -126,7 +127,15 @@ public class Event extends Mappable implements Serializable {
 		this.team = team;
 	}
 
-	@Exclude
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    @Exclude
 	@Override
 	public void fromMap(Map<String, Object> map){
 		if(map != null) {
@@ -137,6 +146,7 @@ public class Event extends Mappable implements Serializable {
 			setStatus(EventStatus.valueOf((String) map.get("status")));
 			setParentEvent(new Event((String) map.get("parentEvent")));
 			setLocation(new Location((String) map.get("location")));
+            setOwner(new User((String) map.get("owner")));
 
 			Map<String, Object> activityList = (Map<String, Object>) map.get("activityList");
 			if(activityList != null && !activityList.isEmpty()){
@@ -167,6 +177,7 @@ public class Event extends Mappable implements Serializable {
         result.put("status", getStatus().name());
 		result.put("parentEvent", getParentEvent().getID());
 		result.put("location", getLocation().getID());
+        result.put("owner", getOwner().getID());
 
 		Map<String, Object> activityList = Activity.getListMap(getActivityList());
 		if(activityList != null) result.put("activityList", activityList);

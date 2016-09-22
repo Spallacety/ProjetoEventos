@@ -5,13 +5,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
+import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZoneOffset;
 
+import java.util.Calendar;
+
 import br.edu.ifpi.projetoeventos.models.others.MyActivity;
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class EditActivityActivity extends MyActivity {
 
@@ -30,20 +36,27 @@ public class EditActivityActivity extends MyActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        initialTime = LocalTime.now();
-        finalTime = LocalTime.now();
+        final Calendar c = Calendar.getInstance();
         initialHour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 TimePickerDialog.OnTimeSetListener otsl = new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        initialHour.setText(initialTime.toString());
-                        initialTime = LocalTime.of(hourOfDay, minute);
+                        LocalTime newInitialTime = LocalTime.of(hourOfDay, minute);
+                        if (finalTime == null) {
+                            initialTime = newInitialTime;
+                            initialHour.setText(initialTime.toString());
+                        } else if (newInitialTime.isBefore(finalTime)){
+                            initialTime = newInitialTime;
+                            initialHour.setText(initialTime.toString());
+                        } else {
+                            Toast.makeText(getBaseContext(), EditActivityActivity.this.getString(R.string.initial_hour_before_final), Toast.LENGTH_LONG).show();
+                        }
                     }
                 };
-                TimePickerDialog dlg = new TimePickerDialog(EditActivityActivity.this, otsl, initialTime.getHour(), initialTime.getMinute(), true);
-                dlg.updateTime(initialTime.getHour(), initialTime.getMinute());
+                TimePickerDialog dlg = new TimePickerDialog(EditActivityActivity.this, otsl, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
+                if(initialTime != null) dlg.updateTime(initialTime.getHour(), initialTime.getMinute());
                 dlg.show();
             }
         });
@@ -53,12 +66,20 @@ public class EditActivityActivity extends MyActivity {
                 TimePickerDialog.OnTimeSetListener otsl = new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        finalHour.setText(finalTime.toString());
-                        finalTime = LocalTime.of(hourOfDay, minute);
+                        LocalTime newFinalTime = LocalTime.of(hourOfDay, minute);
+                        if (initialTime == null){
+                            finalTime = newFinalTime;
+                            finalHour.setText(finalTime.toString());
+                        } else if (newFinalTime.isAfter(initialTime)) {
+                            finalTime = newFinalTime;
+                            finalHour.setText(finalTime.toString());
+                        } else {
+                            Toast.makeText(getBaseContext(), EditActivityActivity.this.getString(R.string.final_hour_after_initial), Toast.LENGTH_LONG).show();
+                        }
                     }
                 };
-                TimePickerDialog dlg = new TimePickerDialog(EditActivityActivity.this, otsl, finalTime.getHour(), finalTime.getMinute(), true);
-                dlg.updateTime(finalTime.getHour(), finalTime.getMinute());
+                TimePickerDialog dlg = new TimePickerDialog(EditActivityActivity.this, otsl, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
+                if(finalTime != null) dlg.updateTime(finalTime.getHour(), finalTime.getMinute());
                 dlg.show();
             }
         });

@@ -3,6 +3,7 @@ package br.edu.ifpi.projetoeventos;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import java.util.ArrayList;
@@ -12,11 +13,16 @@ import br.edu.ifpi.projetoeventos.models.event.Activity;
 import br.edu.ifpi.projetoeventos.models.event.Event;
 import br.edu.ifpi.projetoeventos.firebase.EventDAO;
 import br.edu.ifpi.projetoeventos.models.event.Factory;
+import br.edu.ifpi.projetoeventos.models.event.Location;
 import br.edu.ifpi.projetoeventos.models.others.MyActivity;
+import butterknife.BindView;
 
 public class EditEventActivity extends MyActivity {
 
     private Event event;
+
+    @BindView(R.id.event_edit_location)
+    Button location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,24 +38,44 @@ public class EditEventActivity extends MyActivity {
         }
     }
 
-    public void openActivityListScreen(View v){
+    public void openActivityListScreen(View v) {
         Intent intent = new Intent(this, ActivityListActivity.class);
-        if(event.getActivityList() != new ArrayList<Activity>()){
+        if (event.getActivityList() != new ArrayList<Activity>()) {
             intent.putExtra("activityList", event.getActivityList());
         }
         startActivity(intent);
     }
-    
-    public void openLocationScreen(View v){
+
+    public void openLocationScreen(View v) {
         Intent intent = new Intent(this, EditLocationActivity.class);
-        if(event.getLocation() != null){
-            intent.putExtra("location", event.getLocation());
-        }
+        intent.putExtra("event", event);
         startActivity(intent);
+        Event editEvent = (Event) intent.getSerializableExtra("event");
+        if (editEvent.getLocation() != null)
+            location.setText(editEvent.getLocation().getDescription());
     }
 
-    public void saveEvent(View v){
+    public Event getEvent() {
 
+        return event;
+    }
+
+    public void saveEvent(View v) {
         EventDAO.getInstance().save(event);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case EditLocationActivity.ADD_NEW_LOCATION: {
+                if (resultCode == RESULT_OK) {
+                    Location location = (Location) data.getSerializableExtra("location");
+                    this.location.setText(location.getDescription());
+                    event.setLocation(location);
+                }
+                break;
+            }
+        }
     }
 }

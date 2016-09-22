@@ -55,5 +55,8 @@
     <string name="add">Adicionar</string>
     <string name="activity_list_empty">A lista de atividades está vazia!</string>
     <string name="edit_activity">Editar atividade</string>
+    <string name="value">Valor</string>
+    <string name="final_hour_after_initial">A hora de término deve ser após a hora de início</string>
+    <string name="initial_hour_before_final">A hora de início deve ser antes da hora de término</string>
 
 </resources>

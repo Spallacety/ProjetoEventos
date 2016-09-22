@@ -77,6 +77,7 @@
             android:padding="12dp"
             android:backgroundTint="@color/buttonColor"
             android:textColor="@color/white"
+            android:onClick="saveLocation"
             android:text="@string/save"/>
 
     </LinearLayout>
