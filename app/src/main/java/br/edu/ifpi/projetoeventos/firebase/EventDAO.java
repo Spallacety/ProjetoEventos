@@ -32,8 +32,6 @@ public class EventDAO {
     public void save(final @NonNull Event event) {
         FirebaseDatabase.getInstance().getReference().child(KEY_NAME).child(event.getID()).setValue(event.toMap());
 
-//      saveParticipants(event);
-
         if(event.getActivityList() != null && !event.getActivityList().isEmpty()){
             for (Activity activity : event.getActivityList()) {
                 ActivityDAO.getInstance().save(activity);
@@ -88,18 +86,6 @@ public class EventDAO {
         return false;
     }
 
-//    public Event retrieveRelatedEvents(Event event, List<Event> list){
-//        for (int i = 0; i < event.getRelatedEvents().size(); i++) {
-//            for (int j = 0; j < list.size(); j++) {
-//                if(event.getRelatedEvents().get(i).getID().equals(list.get(j).getID())){
-//                    event.getRelatedEvents().set(i, list.get(j));
-//                    break;
-//                }
-//            }
-//        }
-//        return event;
-//    }
-
     public Location getLocation(final @NonNull Event event){
         Location result = LocationDAO.getInstance().findById(event.getLocation().getID());
         if(result != null) return result;
@@ -122,23 +108,6 @@ public class EventDAO {
         return result;
     }
 
-//    public void retrieveParticipants(final @NonNull Event event, final @NonNull LoadOneCallback callback){
-//        ParticipantRepository.getInstance().findAll(new ParticipantDAO.LoadListCallback() {
-//            @Override
-//            public void onListLoaded(List<Participant> list) {
-//                for (int i = 0; i < event.getParticipants().size(); i++) {
-//                    for (int j = 0; j < list.size(); j++) {
-//                        if(event.getParticipants().get(i).getID().equals(list.get(j).getID())){
-//                            event.getParticipants().set(i, list.get(j));
-//                            break;
-//                        }
-//                    }
-//                }
-//                callback.onLoaded(event);
-//            }
-//        });
-//    }
-
     public Event findById(final @NonNull String id) {
         List<Event> list = getAll();
         Event result = Factory.makeEvent();
@@ -146,8 +115,6 @@ public class EventDAO {
                 if(event.getID().equals(id)){
                     event.setLocation(getLocation(event));
                     event.setActivityList(getActivityList(event));
-//                    retrieveParticipants(event);
-//                    event = retrieveRelatedEvents(event, list);
                     result = event;
                 }
                 break;
@@ -155,13 +122,5 @@ public class EventDAO {
 
         return result;
     }
-
-//    public void saveParticipants(Event event){
-//        if(event.getParticipants() != null && !event.getParticipants().isEmpty()){
-//            for (Participant participant : event.getParticipants()) {
-//                ParticipantRepository.getInstance().save(participant);
-//            }
-//        }
-//    }
 
 }
